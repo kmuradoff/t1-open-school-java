@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: "T1 Open School || Task 1"
+  jpa:
+    hibernate:
+      ddl-auto: none
+  data:
+    jdbc:
+      dialect: postgresql
