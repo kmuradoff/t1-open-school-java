@@ -38,7 +38,7 @@
 ## Запуск
 
 ```bash
-git clone https://github.com/kmuradoff/open-school-java-task1.git
+git clone git@github.com:kmuradoff/t1-open-school-java-task1.git
 cd open-school-java-task1
 docker compose up -d
 ```
