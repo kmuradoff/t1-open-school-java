@@ -23,6 +23,7 @@
 - **Spring Boot 3**
 - **Spring AOP (AspectJ)**
 - **Gradle**
+- **Mockito**
 
 ## Логирование через Аспекты
 
@@ -39,6 +40,9 @@
 
 ```bash
 git clone git@github.com:kmuradoff/t1-open-school-java-task1.git
-cd open-school-java-task1
+cd t1-open-school-java-task1
+./gradlew bootJar
 docker compose up -d
 ```
+
+Приложение будет доступно по адресу: http://localhost:8080/api/tasks

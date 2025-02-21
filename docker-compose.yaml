@@ -1,0 +1,22 @@
+services:
+  postgresql:
+    container_name: postgresql-t1-task1
+    image: postgres:16.1
+    environment:
+      POSTGRES_DB: "t1-task-1"
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "5432:5432"
+    restart: always
+
+  spring-tasks:
+    container_name: spring-tasks
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    restart: always
