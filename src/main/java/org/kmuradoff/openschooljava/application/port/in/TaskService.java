@@ -1,6 +1,5 @@
 package org.kmuradoff.openschooljava.application.port.in;
 
-import org.kmuradoff.openschooljava.adapter.out.postgres.dto.TaskStatus;
 import org.kmuradoff.openschooljava.application.domain.dto.TaskDto;
 
 import java.util.List;

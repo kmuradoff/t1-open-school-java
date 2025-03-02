@@ -2,6 +2,9 @@ package org.kmuradoff.openschooljava.application.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kmuradoff.openschooljava.adapter.out.postgres.dto.TaskStatus;
+import org.kmuradoff.openschooljava.adapter.out.postgres.exception.TaskAdapterException;
+import org.kmuradoff.openschooljava.adapter.out.postgres.mapper.TaskMapper;
+import org.kmuradoff.openschooljava.adapter.out.postgres.model.Task;
 import org.kmuradoff.openschooljava.application.domain.dto.TaskDto;
 import org.kmuradoff.openschooljava.application.port.in.TaskService;
 import org.kmuradoff.openschooljava.application.port.out.KafkaProducerPort;
@@ -16,22 +19,28 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskPort taskPort;
     private final KafkaProducerPort kafkaProducerPort;
+    private final TaskMapper taskMapper;
 
     @Override
     public void createTask(TaskDto taskDto) {
         taskDto.setStatus(TaskStatus.NOT_STARTED);
-        taskPort.createTask(taskDto);
+        taskPort.save(taskMapper.toEntity(taskDto));
     }
 
     @Override
     public TaskDto getTaskById(Long id) {
-        return taskPort.getTaskById(id);
+        Task task = taskPort.findById(id)
+                .orElseThrow(() -> new TaskAdapterException("Task not found for id: " + id));
+
+        return taskMapper.toDto(task);
     }
 
     @Override
     public void updateTask(TaskDto taskDto) {
-        var oldTask = taskPort.getTaskById(taskDto.getId());
-        var updatedTask = taskPort.updateTask(taskDto);
+        var oldTask = taskPort.findById(taskDto.getId())
+                .orElseThrow(() -> new TaskAdapterException("Task not found for id: " + taskDto.getId()));
+
+        var updatedTask = taskPort.save(taskMapper.toEntity(taskDto));
 
         if(oldTask.getStatus() != updatedTask.getStatus()) {
             kafkaProducerPort.sendStatusUpdate(taskDto.getId(), taskDto.getStatus());
@@ -40,11 +49,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTaskById(Long id) {
-        taskPort.deleteTaskById(id);
+        taskPort.deleteById(id);
     }
 
     @Override
     public List<TaskDto> getTasks() {
-        return taskPort.getTasks();
+        return taskPort.findAll().stream()
+                .map(taskMapper::toDto)
+                .toList();
     }
 }

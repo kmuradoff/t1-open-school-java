@@ -1,13 +1,13 @@
 package org.kmuradoff.openschooljava.application.port.out;
 
-import org.kmuradoff.openschooljava.application.domain.dto.TaskDto;
+import org.kmuradoff.openschooljava.adapter.out.postgres.model.Task;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskPort {
-    void createTask(TaskDto taskDto);
-    TaskDto getTaskById(Long id);
-    TaskDto updateTask(TaskDto taskDto);
-    void deleteTaskById(Long id);
-    List<TaskDto> getTasks();
+    Task save(Task task);
+    Optional<Task> findById(Long id);
+    void deleteById(Long id);
+    List<Task> findAll();
 }

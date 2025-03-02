@@ -1,57 +1,46 @@
 package org.kmuradoff.openschooljava.adapter.out.postgres.adapter;
 
 import lombok.RequiredArgsConstructor;
-import org.kmuradoff.openschooljava.adapter.out.postgres.exception.TaskAdapterException;
-import org.kmuradoff.openschooljava.adapter.out.postgres.mapper.TaskMapper;
 import org.kmuradoff.openschooljava.adapter.out.postgres.model.Task;
 import org.kmuradoff.openschooljava.adapter.out.postgres.repository.TaskRepository;
-import org.kmuradoff.openschooljava.application.domain.dto.TaskDto;
 import org.kmuradoff.openschooljava.application.port.out.TaskPort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class TaskAdapter implements TaskPort {
 
     private final TaskRepository taskRepository;
-    private final TaskMapper taskMapper;
 
     @Override
-    public void createTask(TaskDto taskDto) {
-        if (taskDto.getId() != null && taskRepository.existsById(taskDto.getId())) {
-            throw new TaskAdapterException("Task already exists");
-        }
-        Task task = taskMapper.toEntity(taskDto);
-        taskRepository.save(task);
+    public Task save(Task task) {
+        return taskRepository.save(task);
     }
 
     @Override
-    public TaskDto getTaskById(Long id) {
-        return taskRepository.findById(id)
-                .map(taskMapper::toDto)
-                .orElseThrow(() -> new TaskAdapterException("Task not found with id: " + id));
+    public Optional<Task> findById(Long id) {
+        return taskRepository.findById(id);
     }
 
-    @Override
+    /*@Override
     public TaskDto updateTask(TaskDto taskDto) {
         Task existingEntity = taskRepository.findById(taskDto.getId())
                 .orElseThrow(() -> new TaskAdapterException("Task not found with id: " + taskDto.getId()));
         taskMapper.updateEntityFromDto(taskDto, existingEntity);
 
         return taskMapper.toDto(taskRepository.save(existingEntity));
-    }
+    }*/
 
     @Override
-    public void deleteTaskById(Long id) {
+    public void deleteById(Long id) {
         taskRepository.deleteById(id);
     }
 
     @Override
-    public List<TaskDto> getTasks() {
-        return taskRepository.findAll().stream()
-                .map(taskMapper::toDto)
-                .toList();
+    public List<Task> findAll() {
+        return taskRepository.findAll();
     }
 }
