@@ -16,23 +16,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class KafkaConsumerService {
-    private final TaskService taskService;
     private final NotificationService notificationService;
 
-    @Transactional
     @KafkaListener(topics = "task-status", groupId = "task-id")
-    public void handleStatusUpdate(ConsumerRecord<Long, TaskStatus> record, Acknowledgment ack) {
+    public void handleStatusUpdate(ConsumerRecord<String, TaskStatus> record, Acknowledgment ack) {
         var id = record.key();
         var status = record.value();
 
         try {
             log.info("Received message from Kafka: {}", record);
-            var task = taskService.updateTaskStatus(id, status);
-            log.info("Updated task status to {} for id {}", status, id);
 
             var notification = EmailNotificationDto.builder()
-                    .taskName(task.getTitle())
-                    .status(task.getStatus().toString())
+                    .taskId(id)
+                    .taskStatus(status.toString())
                     .build();
 
             notificationService.sendEmailNotification(notification);

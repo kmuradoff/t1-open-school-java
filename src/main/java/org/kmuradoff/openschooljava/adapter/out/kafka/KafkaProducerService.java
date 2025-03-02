@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class KafkaProducerService implements KafkaProducerPort {
-    private final KafkaTemplate<Long, TaskStatus> kafkaTemplate;
+    private final KafkaTemplate<String, TaskStatus> kafkaTemplate;
 
     @Override
     public void sendStatusUpdate(Long id, TaskStatus status) {
-        kafkaTemplate.send("task-status", id, status);
+        kafkaTemplate.send("task-status", id.toString(), status);
         log.info("Update task with id {} to status {} event sent via Kafka", id, status);
     }
 }

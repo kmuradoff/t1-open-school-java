@@ -19,7 +19,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void createTask(TaskDto taskDto) {
-        taskDto.setStatus(TaskStatus.IN_PROGRESS);
+        taskDto.setStatus(TaskStatus.NOT_STARTED);
         taskPort.createTask(taskDto);
     }
 
@@ -30,34 +30,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void updateTask(TaskDto taskDto) {
-        var taskId = taskDto.getId();
-        TaskDto existingTask = null;
+        var oldTask = taskPort.getTaskById(taskDto.getId());
+        var updatedTask = taskPort.updateTask(taskDto);
 
-        if (taskId != null) {
-            existingTask = taskPort.getTaskById(taskId);
+        if(oldTask.getStatus() != updatedTask.getStatus()) {
+            kafkaProducerPort.sendStatusUpdate(taskDto.getId(), taskDto.getStatus());
         }
-
-        if (existingTask == null) {
-            return;
-        }
-
-        if (taskDto.getStatus() == null || taskDto.getStatus() == existingTask.getStatus()) {
-            updateTaskData(taskDto);
-        } else {
-            kafkaProducerPort.sendStatusUpdate(taskId, existingTask.getStatus());
-        }
-    }
-
-    @Override
-    public TaskDto updateTaskStatus(Long id, TaskStatus taskStatus) {
-        var taskDto = taskPort.getTaskById(id);
-        taskDto.setStatus(taskStatus);
-        return taskPort.updateTask(taskDto);
-    }
-
-    @Override
-    public void updateTaskData(TaskDto taskDto) {
-        taskPort.updateTask(taskDto);
     }
 
     @Override
