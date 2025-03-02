@@ -1,9 +1,11 @@
 spring:
   application:
     name: "T1 Open School"
+
   jpa:
     hibernate:
       ddl-auto: none
+
   kafka:
     bootstrap-servers:
       - kafka:29092
@@ -20,6 +22,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     listener:
       ack-mode: manual
+
   mail:
     host: smtp.gmail.com
     port: 587
