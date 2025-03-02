@@ -7,7 +7,8 @@ import java.util.List;
 public interface TaskPort {
     void createTask(TaskDto taskDto);
     TaskDto getTaskById(Long id);
-    void updateTask(TaskDto taskDto);
+    TaskDto updateTask(TaskDto taskDto);
     void deleteTaskById(Long id);
     List<TaskDto> getTasks();
+    boolean existsTaskById(Long id);
 }
