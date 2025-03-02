@@ -32,7 +32,7 @@ public class KafkaConsumerService {
 
             var notification = EmailNotificationDto.builder()
                     .taskName(task.getTitle())
-                    .status(task.getTaskStatus().toString())
+                    .status(task.getStatus().toString())
                     .build();
 
             notificationService.sendEmailNotification(notification);

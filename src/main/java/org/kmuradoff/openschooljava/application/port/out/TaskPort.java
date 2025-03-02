@@ -10,5 +10,4 @@ public interface TaskPort {
     TaskDto updateTask(TaskDto taskDto);
     void deleteTaskById(Long id);
     List<TaskDto> getTasks();
-    boolean existsTaskById(Long id);
 }

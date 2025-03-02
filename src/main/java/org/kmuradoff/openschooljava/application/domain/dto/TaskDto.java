@@ -13,5 +13,5 @@ public class TaskDto {
     private String title;
     private String description;
     private String userId;
-    private TaskStatus taskStatus;
+    private TaskStatus status;
 }

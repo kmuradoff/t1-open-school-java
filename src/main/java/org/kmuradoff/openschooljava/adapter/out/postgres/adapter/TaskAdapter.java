@@ -19,13 +19,8 @@ public class TaskAdapter implements TaskPort {
     private final TaskMapper taskMapper;
 
     @Override
-    public boolean existsTaskById(Long id) {
-        return taskRepository.existsById(id);
-    }
-
-    @Override
     public void createTask(TaskDto taskDto) {
-        if (taskRepository.existsById(taskDto.getId())) {
+        if (taskDto.getId() != null && taskRepository.existsById(taskDto.getId())) {
             throw new TaskAdapterException("Task already exists");
         }
         Task task = taskMapper.toEntity(taskDto);
