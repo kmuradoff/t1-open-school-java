@@ -25,15 +25,6 @@ public class TaskAdapter implements TaskPort {
         return taskRepository.findById(id);
     }
 
-    /*@Override
-    public TaskDto updateTask(TaskDto taskDto) {
-        Task existingEntity = taskRepository.findById(taskDto.getId())
-                .orElseThrow(() -> new TaskAdapterException("Task not found with id: " + taskDto.getId()));
-        taskMapper.updateEntityFromDto(taskDto, existingEntity);
-
-        return taskMapper.toDto(taskRepository.save(existingEntity));
-    }*/
-
     @Override
     public void deleteById(Long id) {
         taskRepository.deleteById(id);
@@ -42,5 +33,10 @@ public class TaskAdapter implements TaskPort {
     @Override
     public List<Task> findAll() {
         return taskRepository.findAll();
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return taskRepository.existsById(id);
     }
 }

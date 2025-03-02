@@ -10,4 +10,5 @@ public interface TaskPort {
     Optional<Task> findById(Long id);
     void deleteById(Long id);
     List<Task> findAll();
+    boolean existsById(Long id);
 }

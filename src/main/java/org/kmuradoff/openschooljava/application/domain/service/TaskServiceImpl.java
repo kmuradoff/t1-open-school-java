@@ -35,14 +35,15 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toDto(task);
     }
 
-    @Override
     public void updateTask(TaskDto taskDto) {
         var oldTask = taskPort.findById(taskDto.getId())
                 .orElseThrow(() -> new TaskAdapterException("Task not found for id: " + taskDto.getId()));
 
-        var updatedTask = taskPort.save(taskMapper.toEntity(taskDto));
+        var previousStatus = oldTask.getStatus();
 
-        if(oldTask.getStatus() != updatedTask.getStatus()) {
+        taskPort.save(taskMapper.toEntity(taskDto));
+
+        if(previousStatus != taskDto.getStatus()) {
             kafkaProducerPort.sendStatusUpdate(taskDto.getId(), taskDto.getStatus());
         }
     }

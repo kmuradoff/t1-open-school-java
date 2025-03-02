@@ -1,13 +1,11 @@
 package org.kmuradoff.openschooljava.adapter.in.kafka;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.kmuradoff.openschooljava.adapter.out.postgres.dto.TaskStatus;
 import org.kmuradoff.openschooljava.application.domain.dto.EmailNotificationDto;
 import org.kmuradoff.openschooljava.application.port.in.NotificationService;
-import org.kmuradoff.openschooljava.application.port.in.TaskService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.kafka.support.Acknowledgment;
