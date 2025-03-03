@@ -9,9 +9,11 @@ import org.kmuradoff.openschooljava.adapter.out.postgres.dto.TaskStatus;
 @Setter
 @AllArgsConstructor
 public class TaskDto {
+
     private Long id;
     private String title;
     private String description;
     private String userId;
     private TaskStatus status;
+
 }

@@ -8,6 +8,7 @@ import org.mapstruct.*;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface TaskMapper {
+
     TaskDto toDto(Task task);
     Task toEntity(TaskDto taskDto);
 

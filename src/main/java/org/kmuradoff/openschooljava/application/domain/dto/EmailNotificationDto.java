@@ -8,6 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmailNotificationDto {
+
     private String taskId;
     private String taskStatus;
+
 }
