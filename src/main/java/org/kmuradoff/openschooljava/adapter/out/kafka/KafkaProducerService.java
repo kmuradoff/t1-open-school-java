@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class KafkaProducerService implements KafkaProducerPort {
+
     private final KafkaTemplate<String, TaskStatus> kafkaTemplate;
 
     @Override

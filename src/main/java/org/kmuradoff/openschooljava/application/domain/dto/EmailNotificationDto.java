@@ -11,5 +11,4 @@ public class EmailNotificationDto {
 
     private String taskId;
     private String taskStatus;
-
 }

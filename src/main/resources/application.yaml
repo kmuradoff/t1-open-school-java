@@ -8,12 +8,12 @@ spring:
 
   kafka:
     bootstrap-servers:
-      - kafka:29092
+      - kafka:9092
     consumer:
       group-id: task-id
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.kmuradoff.openschooljava.adapter.in.kafka.MessageDeserializer
       enable-auto-commit: false
       properties:
         spring.json.trusted.packages: "*"
@@ -22,6 +22,8 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     listener:
       ack-mode: manual
+      type: batch
+      poll-timeout: 3000
 
   mail:
     host: smtp.gmail.com

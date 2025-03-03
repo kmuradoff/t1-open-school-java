@@ -17,9 +17,12 @@ public class Task {
     private Long id;
     private String title;
     private String description;
+
     @Column(name = "user_id")
     private String userId;
+
     @Enumerated(EnumType.STRING)
     @ColumnDefault("NOT_STARTED")
     private TaskStatus status;
+
 }
