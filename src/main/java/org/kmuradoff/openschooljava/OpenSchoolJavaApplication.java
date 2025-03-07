@@ -6,10 +6,10 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
-public class OpenSchoolJavaTask1Application {
+public class OpenSchoolJavaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OpenSchoolJavaTask1Application.class, args);
+        SpringApplication.run(OpenSchoolJavaApplication.class, args);
     }
 
 }

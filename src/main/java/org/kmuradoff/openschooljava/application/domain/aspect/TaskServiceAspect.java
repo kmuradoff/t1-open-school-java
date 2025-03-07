@@ -38,15 +38,15 @@ public class TaskServiceAspect {
 
         try {
             retVal = proceedingJoinPoint.proceed();
+
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+
+            log.info("[Around] --- Метод {} выполнялся {} мс", proceedingJoinPoint.getSignature().getName(), duration);
+
+            return retVal;
         } catch (Throwable e) {
             throw new CustomAspectException("Ошибка при выполнении метода " + proceedingJoinPoint.getSignature().getName(), e);
         }
-
-        long endTime = System.currentTimeMillis();
-
-        long duration = endTime - startTime;
-        log.info("[Around] --- Метод {} выполнялся {} мс", proceedingJoinPoint.getSignature().getName(), duration);
-
-        return retVal;
     }
 }

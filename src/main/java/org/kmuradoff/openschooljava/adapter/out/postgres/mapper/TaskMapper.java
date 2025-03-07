@@ -1,6 +1,6 @@
 package org.kmuradoff.openschooljava.adapter.out.postgres.mapper;
 
-import org.kmuradoff.openschooljava.adapter.out.postgres.model.TaskEntity;
+import org.kmuradoff.openschooljava.adapter.out.postgres.model.Task;
 import org.kmuradoff.openschooljava.application.domain.dto.TaskDto;
 import org.mapstruct.*;
 
@@ -8,9 +8,10 @@ import org.mapstruct.*;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface TaskMapper {
-    TaskDto toDto(TaskEntity taskEntity);
-    TaskEntity toEntity(TaskDto taskDto);
+
+    TaskDto toDto(Task task);
+    Task toEntity(TaskDto taskDto);
 
     @Mapping(target = "id", ignore = true)
-    void updateEntityFromDto(TaskDto taskDto, @MappingTarget TaskEntity taskEntity);
+    void updateEntityFromDto(TaskDto taskDto, @MappingTarget Task task);
 }
