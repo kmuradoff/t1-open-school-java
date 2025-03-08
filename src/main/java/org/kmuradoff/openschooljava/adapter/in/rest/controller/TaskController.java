@@ -17,29 +17,29 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    private void createTask(@RequestBody TaskDto task) {
+    public void createTask(@RequestBody TaskDto task) {
         taskService.createTask(task);
     }
 
     @GetMapping("/{id}")
-    private TaskDto getTask(@PathVariable Long id) {
+    public TaskDto getTask(@PathVariable Long id) {
         return taskService.getTaskById(id);
     }
 
     @PutMapping("/{id}")
-    private void updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+    public void updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
         taskDto.setId(id);
         taskService.updateTask(taskDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    private void deleteTask(@PathVariable Long id) {
+    public void deleteTask(@PathVariable Long id) {
         taskService.deleteTaskById(id);
     }
 
     @GetMapping
-    private List<TaskDto> getAllTasks() {
+    public List<TaskDto> getAllTasks() {
         return taskService.getTasks();
     }
 }
