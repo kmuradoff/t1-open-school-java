@@ -7,6 +7,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
+
 @Testcontainers
 public class CommonContainers {
 
@@ -18,7 +19,6 @@ public class CommonContainers {
     @Container
     private static final PostgreSQLContainer<?> postgreSQLContainer =
             new PostgreSQLContainer<>("postgres:16.1");
-
 
     @DynamicPropertySource
     static void commonProperties(DynamicPropertyRegistry registry) {
@@ -46,6 +46,4 @@ public class CommonContainers {
         registry.add("spring.kafka.listener.type", () -> "batch");
         registry.add("spring.kafka.listener.poll-timeout", () -> "3000");
     }
-
-
 }

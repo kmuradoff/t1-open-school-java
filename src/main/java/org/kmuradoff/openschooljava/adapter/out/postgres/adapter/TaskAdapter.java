@@ -26,7 +26,7 @@ public class TaskAdapter implements TaskPort {
     }
 
     @Override
-    public void deleteById(Task task) {
+    public void delete(Task task) {
         taskRepository.delete(task);
     }
 

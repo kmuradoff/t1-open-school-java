@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface TaskPort {
     Task save(Task task);
     Optional<Task> findById(Long id);
-    void deleteById(Task task);
+    void delete(Task task);
     List<Task> findAll();
 }

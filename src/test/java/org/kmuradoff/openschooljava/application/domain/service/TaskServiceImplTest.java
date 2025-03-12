@@ -145,7 +145,7 @@ class TaskServiceImplTest {
 
         taskService.deleteTaskById(taskId);
 
-        verify(taskPort).deleteById(existingTask);
+        verify(taskPort).delete(existingTask);
     }
 
     @Test
@@ -156,7 +156,7 @@ class TaskServiceImplTest {
 
         assertThrows(NotFoundException.class,
                 () -> taskService.deleteTaskById(invalidId));
-        verify(taskPort, never()).deleteById(any());
+        verify(taskPort, never()).delete(any());
     }
 
     @Test

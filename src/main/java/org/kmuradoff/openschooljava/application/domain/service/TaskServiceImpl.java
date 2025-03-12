@@ -62,7 +62,7 @@ public class TaskServiceImpl implements TaskService {
         if(existingTask == null) {
             throw new NotFoundException("Task not found for id: " + id);
         }
-        taskPort.deleteById(existingTask);
+        taskPort.delete(existingTask);
     }
 
     @Override
