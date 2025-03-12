@@ -40,21 +40,18 @@ public class TaskControllerTest extends CommonContainers {
 
     private void createTasks() {
         Task task1 = new Task();
-        task1.setId(1L);
         task1.setTitle("Task 1");
         task1.setDescription("Task 1");
         task1.setStatus(TaskStatus.IN_PROGRESS);
         task1.setUserId("task1");
 
         Task task2 = new Task();
-        task2.setId(2L);
         task2.setTitle("Task 2");
         task2.setDescription("Task 2");
         task2.setStatus(TaskStatus.COMPLETED);
         task2.setUserId("task2");
 
         Task task3 = new Task();
-        task3.setId(3L);
         task3.setTitle("Task 3");
         task3.setDescription("Task 3");
         task3.setStatus(TaskStatus.CANCELLED);
@@ -108,9 +105,11 @@ public class TaskControllerTest extends CommonContainers {
     @Test
     @DisplayName("Получение задачи по ID: Успешное получение существующей задачи")
     public void getTaskById_success() throws Exception {
-        mockMvc.perform(get("/tasks/{id}", 1))
+        Task task = repository.findAll().get(0);
+
+        mockMvc.perform(get("/tasks/{id}", task.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.id").value(task.getId()))
                 .andExpect(jsonPath("$.title").value("Task 1"))
                 .andExpect(jsonPath("$.status").value("IN_PROGRESS"))
                 .andExpect(jsonPath("$.userId").value("task1"));
@@ -168,10 +167,12 @@ public class TaskControllerTest extends CommonContainers {
     @Test
     @DisplayName("Удаление задачи: Успешное удаление существующей задачи")
     public void deleteTask_success() throws Exception {
-        mockMvc.perform(delete("/tasks/{id}",1))
+        Task task = repository.findAll().get(0);
+
+        mockMvc.perform(delete("/tasks/{id}",task.getId()))
                 .andExpect(status().isNoContent());
 
-        assertFalse(repository.existsById(1L));
+        assertFalse(repository.existsById(task.getId()));
     }
 
     @Test
