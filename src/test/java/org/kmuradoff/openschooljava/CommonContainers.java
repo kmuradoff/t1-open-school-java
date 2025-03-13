@@ -1,24 +1,26 @@
 package org.kmuradoff.openschooljava;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-@Testcontainers
 public class CommonContainers {
 
-    @Container
-    private static final KafkaContainer kafka =
+    static final KafkaContainer kafka =
             new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"))
                     .withReuse(true);
 
-    @Container
-    private static final PostgreSQLContainer<?> postgreSQLContainer =
+    static final PostgreSQLContainer<?> postgreSQLContainer =
             new PostgreSQLContainer<>("postgres:16.1");
+
+    @BeforeAll
+    static void beforeAll() {
+        kafka.start();
+        postgreSQLContainer.start();
+    }
 
     @DynamicPropertySource
     static void commonProperties(DynamicPropertyRegistry registry) {

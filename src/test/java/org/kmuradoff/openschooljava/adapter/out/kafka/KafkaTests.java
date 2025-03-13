@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 @DisplayName("Kafka")
-class KafkaProducerServiceTest extends CommonContainers {
+class KafkaTests extends CommonContainers {
 
     @Autowired
     private KafkaProducerPort producer;
