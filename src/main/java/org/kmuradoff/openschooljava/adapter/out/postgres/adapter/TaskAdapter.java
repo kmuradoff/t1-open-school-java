@@ -26,17 +26,12 @@ public class TaskAdapter implements TaskPort {
     }
 
     @Override
-    public void deleteById(Long id) {
-        taskRepository.deleteById(id);
+    public void delete(Task task) {
+        taskRepository.delete(task);
     }
 
     @Override
     public List<Task> findAll() {
         return taskRepository.findAll();
-    }
-
-    @Override
-    public boolean existsById(Long id) {
-        return taskRepository.existsById(id);
     }
 }
