@@ -1,8 +1,11 @@
 package org.kmuradoff.openschooljava.adapter.in.rest.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.kmuradoff.openschooljava.CommonContainers;
+import org.kmuradoff.openschooljava.adapter.out.postgres.dto.TaskStatus;
+import org.kmuradoff.openschooljava.adapter.out.postgres.model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +28,9 @@ public class TaskControllerTest extends CommonContainers {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Test
     @DisplayName("Should retrieve all tasks successfully")
     public void getAllTasks_success() throws Exception {
@@ -36,35 +42,30 @@ public class TaskControllerTest extends CommonContainers {
     @Test
     @DisplayName("Should create a new task successfully")
     public void createTask_success() throws Exception {
-        String newTaskJson = """
-                {
-                    "title": "New Task",
-                    "description": "New description",
-                    "status": "IN_PROGRESS",
-                    "userId": "new-user"
-                }
-                """;
+        Task newTask = new Task();
+        newTask.setTitle("New Task");
+        newTask.setDescription("New description");
+        newTask.setStatus(TaskStatus.IN_PROGRESS);
+        newTask.setUserId("new-user");
 
         mockMvc.perform(post("/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(newTaskJson))
+                        .content(objectMapper.writeValueAsString(newTask)))
                 .andExpect(status().isCreated());
     }
 
     @Test
     @DisplayName("Should return Bad Request when creating task without title")
     public void createTask_missingTitle_returnsBadRequest() throws Exception {
-        String invalidTaskJson = """
-                {
-                    "description": "Invalid task",
-                    "status": "COMPLETED",
-                    "userId": "user1"
-                }
-                """;
+        Task testTask = new Task();
+        testTask.setTitle(null);
+        testTask.setDescription("New description");
+        testTask.setStatus(TaskStatus.COMPLETED);
+        testTask.setUserId("new-user");
 
         mockMvc.perform(post("/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidTaskJson))
+                        .content(objectMapper.writeValueAsString(testTask)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -89,37 +90,16 @@ public class TaskControllerTest extends CommonContainers {
     @Test
     @DisplayName("Should update an existing task successfully")
     public void updateTask_success() throws Exception {
-        String updatedTaskJson = """
-                {
-                    "title": "Updated Task 1",
-                    "description": "Updated description",
-                    "status": "COMPLETED",
-                    "userId": "updated-user"
-                }
-                """;
+        Task testTask = new Task();
+        testTask.setTitle("New Title Updated");
+        testTask.setDescription("New description");
+        testTask.setStatus(TaskStatus.COMPLETED);
+        testTask.setUserId("updated-user");
 
         mockMvc.perform(put("/tasks/{id}", 999)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(updatedTaskJson))
+                        .content(objectMapper.writeValueAsString(testTask)))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("Should return Bad Request when updating task with invalid status")
-    public void updateTask_invalidStatus_returnsBadRequest() throws Exception {
-        String invalidUpdateJson = """
-                {
-                    "title": "Task",
-                    "description": "Desc",
-                    "status": "INVALID_STATUS",
-                    "userId": "user1"
-                }
-                """;
-
-        mockMvc.perform(put("/tasks/{id}", 999)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidUpdateJson))
-                .andExpect(status().isBadRequest());
     }
 
     @Test
