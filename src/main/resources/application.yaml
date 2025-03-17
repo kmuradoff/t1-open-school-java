@@ -29,10 +29,16 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: muradoffk@gmail.com
-    password: qtmkymjwqqbdczmz
+    password: qtmkymjwqqbdczmz // revoked
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+
+t1:
+  email:
+    from: muradoffk@gmail.com
+    to: muradoffk@gmail.com
+    subject: Task's status update notification

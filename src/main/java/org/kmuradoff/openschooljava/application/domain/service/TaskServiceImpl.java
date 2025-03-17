@@ -2,10 +2,11 @@ package org.kmuradoff.openschooljava.application.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kmuradoff.openschooljava.adapter.out.postgres.dto.TaskStatus;
-import org.kmuradoff.openschooljava.adapter.out.postgres.exception.TaskAdapterException;
 import org.kmuradoff.openschooljava.adapter.out.postgres.mapper.TaskMapper;
 import org.kmuradoff.openschooljava.adapter.out.postgres.model.Task;
 import org.kmuradoff.openschooljava.application.domain.dto.TaskDto;
+import org.kmuradoff.openschooljava.application.domain.exception.BadRequestException;
+import org.kmuradoff.openschooljava.application.domain.exception.NotFoundException;
 import org.kmuradoff.openschooljava.application.port.in.TaskService;
 import org.kmuradoff.openschooljava.application.port.out.KafkaProducerPort;
 import org.kmuradoff.openschooljava.application.port.out.TaskPort;
@@ -23,21 +24,28 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void createTask(TaskDto taskDto) {
-        taskDto.setStatus(TaskStatus.NOT_STARTED);
+        if (taskDto.getTitle() == null || taskDto.getTitle().isBlank()) {
+            throw new BadRequestException("Task must have a title.");
+        }
+
+        if(taskDto.getStatus() == null) {
+            taskDto.setStatus(TaskStatus.NOT_STARTED);
+        }
+
         taskPort.save(taskMapper.toEntity(taskDto));
     }
 
     @Override
     public TaskDto getTaskById(Long id) {
         Task task = taskPort.findById(id)
-                .orElseThrow(() -> new TaskAdapterException("Task not found for id: " + id));
+                .orElseThrow(() -> new NotFoundException("Task not found for id: " + id));
 
         return taskMapper.toDto(task);
     }
 
     public void updateTask(TaskDto taskDto) {
         var oldTask = taskPort.findById(taskDto.getId())
-                .orElseThrow(() -> new TaskAdapterException("Task not found for id: " + taskDto.getId()));
+                .orElseThrow(() -> new NotFoundException("Task not found for id: " + taskDto.getId()));
 
         var previousStatus = oldTask.getStatus();
 
@@ -50,7 +58,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTaskById(Long id) {
-        taskPort.deleteById(id);
+        Task existingTask = taskPort.findById(id).orElse(null);
+        if(existingTask == null) {
+            throw new NotFoundException("Task not found for id: " + id);
+        }
+        taskPort.delete(existingTask);
     }
 
     @Override
